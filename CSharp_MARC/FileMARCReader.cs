@@ -38,13 +38,11 @@ namespace MARC
 	/// </summary>
 	public class FileMARCReader : IEnumerable, IDisposable
 	{
-		private readonly string _filename = null;
-		private readonly FileStream _reader = null;
+		private readonly FileStream _reader;
 
 		public FileMARCReader(string filename)
 		{
-			_filename = filename;
-			_reader = new FileStream(_filename, FileMode.Open, FileAccess.Read, FileShare.Read);
+			_reader = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
 		}
 
 		public IEnumerator GetEnumerator()
@@ -55,25 +53,23 @@ namespace MARC
 			while (_reader.Position < _reader.Length)
 			{
 				int delPosition, realReadSize;
-				do
+				
+                do
 				{
 					realReadSize = _reader.Read(buffer, 0, bufferSize);
 
-					if (realReadSize != bufferSize)
-						Array.Resize(ref buffer, realReadSize + 1);
+					delPosition = Array.LastIndexOf(buffer, (byte)FileMARC.END_OF_RECORD, realReadSize-1) + 1;
 
-					delPosition = Array.LastIndexOf(buffer, Convert.ToByte(FileMARC.END_OF_RECORD)) + 1;
-
-					if (delPosition == 0 & realReadSize == bufferSize)
+					if (delPosition == 0 && realReadSize == bufferSize)
 					{
 						bufferSize *= 2;
 						buffer = new byte[bufferSize + 1];
 					}
-				} while (delPosition == 0 & realReadSize == bufferSize);
+				} while (delPosition == 0 && realReadSize == bufferSize);
 
 				_reader.Position = _reader.Position - (realReadSize - delPosition);
 
-				FileMARC marc = new FileMARC(Encoding.GetEncoding(1251).GetString(buffer, 0, delPosition));
+				FileMARC marc = new FileMARC(Encoding.Default.GetString(buffer, 0, delPosition));
 				foreach (Record marcRecord in marc)
 				{
 					yield return marcRecord;
