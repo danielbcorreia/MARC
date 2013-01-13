@@ -1,9 +1,10 @@
-=== MARC
+## MARC
 
 An enhanced version of the .NET parser for MARC records (ISO 2709), ported to C# by Matt Schraeder and originally developed in PHP by Dan Scott.
 
-==== Original Project README
+## Original Project README
 
+'''
 /**
  * Parser for MARC records
  *
@@ -30,6 +31,7 @@ An enhanced version of the .NET parser for MARC records (ISO 2709), ported to C#
  * @copyright 2009-2012 Matt Schraeder and Bound to Stay Bound Books <http://www.btsb.com>
  * @license   http://www.gnu.org/copyleft/lesser.html  LGPL License 3
  */
+'''
  
 2012-06-13 Changes:
 Added FileMARCReader class for handling large MARC21 files without loading the entire file into memory. Special thanks to Stas Paladiy for reporting this issue and helping resolve it.
