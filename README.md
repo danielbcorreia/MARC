@@ -1,6 +1,7 @@
 ## MARC
 
 An enhanced version of the .NET parser for MARC records (ISO 2709), ported to C# by Matt Schraeder and originally developed in PHP by Dan Scott.
+Refactored by Daniel Correia. Also added support for UTF-8.
 
 ## Original Project README
 

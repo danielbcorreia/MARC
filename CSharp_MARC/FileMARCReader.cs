@@ -30,13 +30,14 @@ using System;
 using System.Text;
 using System.Collections;
 using System.IO;
+using System.Collections.Generic;
 
 namespace MARC
 {
 	/// <summary>
 	/// This is a wrapper for FileMARC that allows for reading large files without loading the entire file into memory.
 	/// </summary>
-	public class FileMARCReader : IEnumerable, IDisposable
+	public class FileMARCReader : IEnumerable<Record>, IDisposable
 	{
 		private readonly FileStream _reader;
 
@@ -45,7 +46,7 @@ namespace MARC
 			_reader = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
 		}
 
-		public IEnumerator GetEnumerator()
+		public IEnumerator<Record> GetEnumerator()
 		{
 			int bufferSize = 10 * 1024 * 1024;
 			byte[] buffer = new byte[bufferSize + 1];
@@ -76,6 +77,11 @@ namespace MARC
 				}
 			}
 		}
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
 		public void Dispose()
 		{
